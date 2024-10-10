@@ -43,6 +43,7 @@ class WaveSink(Sink):
         self.encoding = "wav"
         self.vc = None
         self.audio_data = {}
+        self.last_data_timestamp = None
 
     def format_audio(self, audio):
         """Formats the recorded audio.

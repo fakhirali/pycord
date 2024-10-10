@@ -898,7 +898,6 @@ class VoiceClient(VoiceProtocol):
                 silence = dT - 960
 
         self.user_timestamps.update({data.ssrc: (data.timestamp, data.receive_time)})
-
         data.decoded_data = (
             struct.pack("<h", 0) * max(0, int(silence)) * opus._OpusStruct.CHANNELS
             + data.decoded_data
@@ -907,6 +906,7 @@ class VoiceClient(VoiceProtocol):
         while data.ssrc not in self.ws.ssrc_map:
             time.sleep(0.05)
         self.sink.write(data.decoded_data, self.ws.ssrc_map[data.ssrc]["user_id"])
+        self.sink.last_data_timestamp = data.timestamp
 
     def is_playing(self) -> bool:
         """Indicates if we're currently playing audio."""
